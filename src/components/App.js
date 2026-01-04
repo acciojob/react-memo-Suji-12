@@ -1,6 +1,5 @@
 import React, { useState, useMemo, memo } from "react";
 import "../styles/App.css";
-
 const TodoItem = memo(({ todo }) => <li>{todo}</li>);
 
 const App = () => {
@@ -8,8 +7,8 @@ const App = () => {
   const [count, setCount] = useState(0);
   const [task, setTask] = useState("");
   const totalTodos = useMemo(() => todos.length, [todos]);
-  const addTodo = () => setTodos([...todos, "New todo"]);
 
+  const addTodo = () => setTodos([...todos, "New todo"]);
   const addCustomTodo = () => {
     if (task.length > 5) {
       setTodos([...todos, task]);
@@ -27,7 +26,7 @@ const App = () => {
         Increment
       </button>
 
-      {/* Default todo */}
+      {/* Add default todo */}
       <button id="addTodo" onClick={addTodo}>
         Add Todo
       </button>
@@ -43,10 +42,10 @@ const App = () => {
         Submit
       </button>
 
-      {/* Total todos */}
+      {/* Display total todos */}
       <h4>Total Todos: {totalTodos}</h4>
 
-      {/* Todos list */}
+      {/* Todos list using React.memo */}
       <ul>
         {todos.map((todo, index) => (
           <TodoItem key={index} todo={todo} />
