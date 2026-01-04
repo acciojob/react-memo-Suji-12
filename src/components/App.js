@@ -1,4 +1,4 @@
-import React, { useState, useMemo, memo } from "react";
+import React, { useState, useMemo, useCallback, memo } from "react";
 import "../styles/App.css";
 const TodoItem = memo(({ todo }) => <li>{todo}</li>);
 
@@ -6,15 +6,18 @@ const App = () => {
   const [todos, setTodos] = useState([]);
   const [count, setCount] = useState(0);
   const [task, setTask] = useState("");
-  const totalTodos = useMemo(() => todos.length, [todos]);
 
-  const addTodo = () => setTodos([...todos, "New todo"]);
-  const addCustomTodo = () => {
+  const totalTodos = useMemo(() => todos.length, [todos]);
+  const addTodo = useCallback(() => {
+    setTodos((prevTodos) => [...prevTodos, "New todo"]);
+  }, []);
+
+  const addCustomTodo = useCallback(() => {
     if (task.length > 5) {
-      setTodos([...todos, task]);
+      setTodos((prevTodos) => [...prevTodos, task]);
       setTask("");
     }
-  };
+  }, [task]);
 
   return (
     <div id="main">
@@ -22,7 +25,7 @@ const App = () => {
 
       {/* Counter */}
       <p>Count: {count}</p>
-      <button id="increment" onClick={() => setCount(count + 1)}>
+      <button id="increment" onClick={() => setCount((prev) => prev + 1)}>
         Increment
       </button>
 
@@ -45,7 +48,7 @@ const App = () => {
       {/* Display total todos */}
       <h4>Total Todos: {totalTodos}</h4>
 
-      {/* Todos list using React.memo */}
+      {/* Todo list using React.memo */}
       <ul>
         {todos.map((todo, index) => (
           <TodoItem key={index} todo={todo} />
