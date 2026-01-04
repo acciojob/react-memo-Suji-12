@@ -1,7 +1,6 @@
 import React, { useState, useMemo, memo } from "react";
 import "./styles.css";
-
-const SkillsList = memo(({ skills }) => {
+const SkillList = memo(function SkillList({ skills }) {
   return (
     <ul>
       {skills.map((skill, index) => (
@@ -14,7 +13,6 @@ const SkillsList = memo(({ skills }) => {
 function App() {
   const [todos, setTodos] = useState([]);
   const [count, setCount] = useState(0);
-
   const [skills, setSkills] = useState([
     "HTML",
     "CSS",
@@ -22,21 +20,26 @@ function App() {
     "React",
   ]);
   const [input, setInput] = useState("");
+
   const addTodo = () => {
-    setTodos((prev) => [...prev, "New todo"]);
-  };
-  const addSkill = () => {
-    if (input.length > 5) {
-      setSkills([...skills, input]);
-      setInput("");
-    }
+    setTodos([...todos, "New todo"]);
   };
   const expensiveCalculation = (num) => {
     for (let i = 0; i < 1000000000; i++) {}
     return num;
   };
 
-  const calculation = useMemo(() => expensiveCalculation(1000000000), []);
+  const calculation = useMemo(
+    () => expensiveCalculation(1000000000),
+    [count]
+  );
+
+  const addSkill = () => {
+    if (input.length > 5) {
+      setSkills([...skills, input]);
+      setInput("");
+    }
+  };
 
   return (
     <div>
@@ -65,7 +68,7 @@ function App() {
       />
       <button onClick={addSkill}>Add Skill</button>
 
-      <SkillsList skills={skills} />
+      <SkillList skills={skills} />
     </div>
   );
 }
