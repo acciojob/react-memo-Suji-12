@@ -1,61 +1,73 @@
-import React, { useState, useMemo, useCallback, memo } from "react";
-import "../styles/App.css";
-const TodoItem = memo(({ todo }) => <li>{todo}</li>);
+import React, { useState, useMemo, memo } from "react";
+import "./styles.css";
 
-const App = () => {
+const SkillsList = memo(({ skills }) => {
+  return (
+    <ul>
+      {skills.map((skill, index) => (
+        <li key={index}>{skill}</li>
+      ))}
+    </ul>
+  );
+});
+
+function App() {
   const [todos, setTodos] = useState([]);
   const [count, setCount] = useState(0);
-  const [task, setTask] = useState("");
 
-  const totalTodos = useMemo(() => todos.length, [todos]);
-  const addTodo = useCallback(() => {
-    setTodos((prevTodos) => [...prevTodos, "New todo"]);
-  }, []);
-
-  const addCustomTodo = useCallback(() => {
-    if (task.length > 5) {
-      setTodos((prevTodos) => [...prevTodos, task]);
-      setTask("");
+  const [skills, setSkills] = useState([
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "React",
+  ]);
+  const [input, setInput] = useState("");
+  const addTodo = () => {
+    setTodos((prev) => [...prev, "New todo"]);
+  };
+  const addSkill = () => {
+    if (input.length > 5) {
+      setSkills([...skills, input]);
+      setInput("");
     }
-  }, [task]);
+  };
+  const expensiveCalculation = (num) => {
+    for (let i = 0; i < 1000000000; i++) {}
+    return num;
+  };
+
+  const calculation = useMemo(() => expensiveCalculation(1000000000), []);
 
   return (
-    <div id="main">
-      <h2>Task Management</h2>
+    <div>
+      <h1>React.useMemo</h1>
 
-      {/* Counter */}
+      <h2>My todos</h2>
+      {todos.map((todo, index) => (
+        <p key={index}>{todo}</p>
+      ))}
+      <button onClick={addTodo}>Add Todo</button>
+
+      <hr />
+
       <p>Count: {count}</p>
-      <button id="increment" onClick={() => setCount((prev) => prev + 1)}>
-        Increment
-      </button>
+      <button onClick={() => setCount(count + 1)}>+</button>
 
-      {/* Add default todo */}
-      <button id="addTodo" onClick={addTodo}>
-        Add Todo
-      </button>
+      <h2>Expensive Calculation</h2>
+      <p>{calculation}</p>
 
-      {/* Custom todo input */}
+      <hr />
+
+      <h2>React.memo</h2>
       <input
-        id="taskInput"
-        type="text"
-        value={task}
-        onChange={(e) => setTask(e.target.value)}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
       />
-      <button id="submitTask" onClick={addCustomTodo}>
-        Submit
-      </button>
+      <button onClick={addSkill}>Add Skill</button>
 
-      {/* Display total todos */}
-      <h4>Total Todos: {totalTodos}</h4>
-
-      {/* Todo list using React.memo */}
-      <ul>
-        {todos.map((todo, index) => (
-          <TodoItem key={index} todo={todo} />
-        ))}
-      </ul>
+      <SkillsList skills={skills} />
     </div>
   );
-};
+}
 
 export default App;
